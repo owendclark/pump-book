@@ -30,7 +30,7 @@ const Home = () => {
   };
 
   const handleAdd = () => {
-    if (newDate && newExercises.some((exercise) => !exercise.exercise.trim())) {
+    if (newDate && !newExercises.some((exercise) => !exercise.exercise.trim())) {
       const newDays = [
         { date: newDate, exercises: newExercises.map((e) => e.exercise) },
         ...trainingDays,
