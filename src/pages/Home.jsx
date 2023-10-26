@@ -1,27 +1,108 @@
 import React, { useState } from "react";
-import TrainingDayCard from "../components/TrainingDayCard";
-import AddTrainingDayButton from "../components/AddTrainingDayButton";
 
-import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
-import SaveIcon from "@mui/icons-material/Save";
 import {
   Container,
   Typography,
   Box,
   Dialog,
-  DialogTitle,
   DialogContent,
   TextField,
   IconButton,
   Slide,
+  Fab,
+  Card,
+  CardContent,
+  Stack,
+  Switch, //Maybe Not
+  alpha,
+  Divider,
 } from "@mui/material";
+import {
+  Add as AddIcon,
+  Close as CloseIcon,
+  Save as SaveIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Brightness4 as Brightness4Icon, //Maybe Not
+  Brightness7 as Brightness7Icon, //Maybe Not
+} from "@mui/icons-material";
 
 const SlideUpTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Home = () => {
+const TrainingDayCard = ({ date, exercises, onEdit, onDelete }) => {
+  return (
+    <Card
+      elevation={0} //Play around with removing this line
+      sx={{
+        mb: 2,
+        //p: 2,
+        //boxShadow: 2,
+        borderRadius: 2,
+        border: "1px solid",
+        borderColor: alpha("#007BFF", 0.3),
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <CardContent>
+        <Typography
+          variant="h6"
+          fontFamily="serif"
+          color="primary"
+          gutterBottom
+        >
+          {date}
+        </Typography>
+
+        <Stack spacing={1} mb={2}>
+          {exercises.map((exercise, index) => (
+            <Typography key={index} variant="body2">
+              {exercise}
+            </Typography>
+          ))}
+        </Stack>
+
+        <Stack direction="row" spacing={1} justifyContent="flex-end">
+          <IconButton
+            onClick={() => onEdit(date)}
+            size="large"
+            color="primary"
+            sx={{ zIndex: 1 }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={() => onDelete(date)}
+            size="large"
+            color="error"
+            sx={{ zIndex: 1 }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Stack>
+      </CardContent>
+
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage:
+            "linear-gradient(120deg, transparent 0%, transparent 70%, #007BFF 70%)",
+          transform: "skewX(-15deg)",
+          transformOrigin: "bottom left",
+          opacity: 0.06,
+        }}
+      />
+    </Card>
+  );
+};
+
+const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [open, setOpen] = useState(false);
   const [editingDay, setEditingDay] = useState(null);
   const [newDate, setNewDate] = useState("");
@@ -99,7 +180,38 @@ const Home = () => {
           Pump Book
         </Typography>
 
-        <AddTrainingDayButton onClick={handleOpen} />
+        <Box
+          sx={{
+            position: "fixed",
+            top: 16,
+            right: 16,
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+          <Switch
+            checked={isDarkMode}
+            onChange={toggleDarkMode}
+            color="default"
+          />
+        </Box>
+
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={handleOpen}
+          sx={{
+            position: "fixed",
+            bottom: 16,
+            right: 16,
+            zIndex: 1000,
+          }}
+        >
+          <AddIcon />
+        </Fab>
 
         <Dialog
           open={open}
