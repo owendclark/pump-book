@@ -1,7 +1,10 @@
+import React, { useState } from "react";
 import TrainingDayCard from "../components/TrainingDayCard";
 import AddTrainingDayButton from "../components/AddTrainingDayButton";
 
-import { useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import SaveIcon from "@mui/icons-material/Save";
 import {
   Container,
   Typography,
@@ -10,12 +13,17 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
-  DialogActions,
-  Button,
+  IconButton,
+  Slide,
 } from "@mui/material";
+
+const SlideUpTransition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const Home = () => {
   const [open, setOpen] = useState(false);
+  const [editingDay, setEditingDay] = useState(null);
   const [newDate, setNewDate] = useState("");
   const [newExercises, setNewExercises] = useState([{ exercise: "" }]);
   const [trainingDays, setTrainingDays] = useState([
@@ -30,11 +38,19 @@ const Home = () => {
   };
 
   const handleAdd = () => {
-    if (newDate && !newExercises.some((exercise) => !exercise.exercise.trim())) {
+    if (
+      newDate &&
+      !newExercises.some((exercise) => !exercise.exercise.trim())
+    ) {
+      const updatedTrainingDays = editingDay
+        ? trainingDays.filter((day) => day.date !== editingDay)
+        : [...trainingDays];
+
       const newDays = [
         { date: newDate, exercises: newExercises.map((e) => e.exercise) },
-        ...trainingDays,
+        ...updatedTrainingDays,
       ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
       setTrainingDays(newDays);
       setNewDate("");
       setNewExercises([{ exercise: "" }]);
@@ -52,15 +68,64 @@ const Home = () => {
     setNewExercises(changedExercises);
   };
 
+  const handleDelete = (dateToDelete) => {
+    const updatedTrainingDays = trainingDays.filter(
+      (day) => day.date !== dateToDelete
+    );
+    setTrainingDays(updatedTrainingDays);
+  };
+
+  const handleEdit = (dateToEdit) => {
+    const dayToEdit = trainingDays.find((day) => day.date === dateToEdit);
+    setEditingDay(dayToEdit.date);
+    setNewDate(dayToEdit.date);
+    setNewExercises(dayToEdit.exercises.map((exercise) => ({ exercise })));
+    handleOpen();
+  };
+
   return (
     <Container maxWidth="sm">
       <Box my={4} textAlign="center">
-        <Typography variant="h4" color="primary" gutterBottom>
+        <Typography
+          variant="h2"
+          color="primary"
+          gutterBottom
+          sx={{
+            fontWeight: "bold",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+          }}
+        >
           Pump Book
         </Typography>
+
         <AddTrainingDayButton onClick={handleOpen} />
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Add New Training Day</DialogTitle>
+
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          fullScreen
+          TransitionComponent={SlideUpTransition}
+        >
+          <Box
+            sx={{
+              p: 3,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              background: (theme) => theme.palette.primary.light,
+            }}
+          >
+            <IconButton edge="start" color="inherit" onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+            <Typography variant="h6" color="secondary">
+              {editingDay ? "Edit Training Day" : "Add Training Day"}
+            </Typography>
+            <IconButton color="secondary" onClick={handleAdd}>
+              <SaveIcon />
+            </IconButton>
+          </Box>
           <DialogContent>
             <TextField
               margin="dense"
@@ -84,22 +149,23 @@ const Home = () => {
                 placeholder="E.g., Squat: 5x5"
               />
             ))}
-            <Button onClick={handleAddExerciseField} color="primary">
-              Add Exercise
-            </Button>
+            <IconButton
+              edge="end"
+              color="primary"
+              onClick={handleAddExerciseField}
+            >
+              <AddIcon />
+            </IconButton>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleAdd} color="primary">
-              Add
-            </Button>
-          </DialogActions>
         </Dialog>
         {trainingDays.map((day) => (
           <Box mt={3} key={day.date}>
-            <TrainingDayCard date={day.date} exercises={day.exercises} />
+            <TrainingDayCard
+              date={day.date}
+              exercises={day.exercises}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           </Box>
         ))}
       </Box>

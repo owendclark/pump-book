@@ -1,17 +1,21 @@
-import { Button } from "@mui/material";
+import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 const AddTrainingDayButton = ({ onClick }) => {
   return (
-    <Button
-      variant="contained"
+    <Fab
       color="primary"
-      startIcon={<AddIcon />}
+      aria-label="add"
       onClick={onClick}
-      style={{ marginBottom: "16px" }}
+      sx={{
+        position: "fixed",
+        bottom: 16,
+        right: 16,
+        zIndex: 1000,
+      }}
     >
-      Add Training Day
-    </Button>
+      <AddIcon />
+    </Fab>
   );
 };
 
