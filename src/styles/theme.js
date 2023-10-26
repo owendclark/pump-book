@@ -38,6 +38,14 @@ const getDynamicTheme = (mode) => {
         main: "#FF4D4F",
         contrastText: currentPalette.text,
       },
+      success: {
+        main: "#4CAF50",
+        contrastText: currentPalette.text,
+      },
+      warning: {
+        main: "#FFC107",
+        contrastText: currentPalette.text,
+      },
     },
     typography: {
       fontFamily: "'Poppins', sans-serif",
@@ -56,6 +64,14 @@ const getDynamicTheme = (mode) => {
         fontSize: "1.5rem",
         fontWeight: 600,
       },
+      body1: {
+        fontSize: "1rem",
+        fontWeight: 400,
+      },
+      caption: {
+        fontSize: "0.75rem",
+        fontWeight: 400,
+      },
     },
     components: {
       MuiButton: {
@@ -63,7 +79,7 @@ const getDynamicTheme = (mode) => {
           root: {
             borderRadius: "50px",
             textTransform: "none",
-            padding: "12px 24px",
+            padding: "10px 20px",
           },
         },
       },
@@ -89,7 +105,6 @@ const getDynamicTheme = (mode) => {
         styleOverrides: {
           root: {
             letterSpacing: "0.025em",
-            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
           },
           h6: {
             fontSize: "1.1rem",

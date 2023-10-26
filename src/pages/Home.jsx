@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import gradientText from "../styles/gradientText";
+import SlideUpTransition from "../styles/SlideUpTransition";
+import TrainingDayCard from "../components/TrainingDayCard";
+import ThemeToggler from "../components/ThemeToggler";
+import ExerciseFields from "../components/ExerciseFields";
 
 import {
   Container,
@@ -8,89 +13,13 @@ import {
   DialogContent,
   TextField,
   IconButton,
-  Slide,
   Fab,
-  Card,
-  CardContent,
-  Stack,
-  Switch,
-  alpha,
-  Divider,
 } from "@mui/material";
 import {
   Add as AddIcon,
   Close as CloseIcon,
   Save as SaveIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Brightness4 as Brightness4Icon,
-  Brightness7 as Brightness7Icon,
 } from "@mui/icons-material";
-
-const FluidTransition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} easing="ease-in-out" />;
-});
-
-const TrainingDayCard = ({ date, exercises, onEdit, onDelete }) => {
-  return (
-    <Card
-      sx={{
-        mb: 2,
-        p: 2,
-        boxShadow: 2,
-        borderRadius: "16px",
-        position: "relative",
-      }}
-    >
-      <Typography variant="h6" color="primary">
-        {date}
-      </Typography>
-      <Divider sx={{ my: 1.5, borderColor: alpha("#007BFF", 0.3) }} />
-      {exercises.map((exercise, index) => (
-        <Typography key={index} variant="body2" my={0.5}>
-          {exercise}
-        </Typography>
-      ))}
-      <Stack direction="row" justifyContent="flex-end" spacing={1} mt={2}>
-        <IconButton
-          onClick={() => onEdit(date)}
-          size="small"
-          color="primary"
-          sx={{ zIndex: 1 }}
-        >
-          <EditIcon fontSize="small" />
-        </IconButton>
-        <IconButton
-          onClick={() => onDelete(date)}
-          size="small"
-          color="error"
-          sx={{ zIndex: 1 }}
-        >
-          <DeleteIcon fontSize="small" />
-        </IconButton>
-      </Stack>
-
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundImage:
-            "linear-gradient(120deg, transparent 0%, transparent 65%, #007BFF 65%)",
-          transform: `skewX(${Math.random() * -20 - 10}deg)`,
-          transformOrigin: "bottom left",
-          opacity: 0.08,
-          transition: "transform 0.2s ease-in-out",
-          "&:hover": {
-            transform: `skewX(${Math.random() * -25 - 5}deg) scale(1.02)`,
-          },
-        }}
-      />
-    </Card>
-  );
-};
 
 const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [open, setOpen] = useState(false);
@@ -101,6 +30,8 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
     { date: "2023-10-24", exercises: ["Squat: 5x5", "Bench: 3x8"] },
     { date: "2023-10-23", exercises: ["Deadlift: 3x4", "Pull-ups: 3x10"] },
   ]);
+
+  const sortByDateDesc = (a, b) => new Date(b.date) - new Date(a.date);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -113,16 +44,18 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
       newDate &&
       !newExercises.some((exercise) => !exercise.exercise.trim())
     ) {
+      const newEntry = {
+        date: newDate,
+        exercises: newExercises.map((e) => e.exercise),
+      };
       const updatedTrainingDays = editingDay
         ? trainingDays.filter((day) => day.date !== editingDay)
         : [...trainingDays];
 
-      const newDays = [
-        { date: newDate, exercises: newExercises.map((e) => e.exercise) },
-        ...updatedTrainingDays,
-      ].sort((a, b) => new Date(b.date) - new Date(a.date));
+      updatedTrainingDays.push(newEntry);
+      updatedTrainingDays.sort(sortByDateDesc);
 
-      setTrainingDays(newDays);
+      setTrainingDays(updatedTrainingDays);
       setNewDate("");
       setNewExercises([{ exercise: "" }]);
       handleClose();
@@ -157,45 +90,11 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   return (
     <Container maxWidth="sm">
       <Box my={4} textAlign="center">
-        <Typography
-          variant="h2"
-          color="primary"
-          gutterBottom
-          sx={{
-            fontWeight: "bold",
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-            marginBottom: 2,
-            background: "linear-gradient(120deg, #007BFF, #00BFBB)",
-            "-webkit-background-clip": "text",
-            "-webkit-text-fill-color": "transparent",
-          }}
-        >
+        <Typography variant="h2" color="primary" gutterBottom sx={gradientText}>
           Pump Book
         </Typography>
 
-        <Box
-          sx={{
-            position: "fixed",
-            top: 16,
-            right: 16,
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
-          {isDarkMode ? (
-            <Brightness7Icon sx={{ color: alpha("#007BFF", 0.7) }} />
-          ) : (
-            <Brightness4Icon sx={{ color: alpha("#00BFBB", 0.7) }} />
-          )}
-          <Switch
-            checked={isDarkMode}
-            onChange={toggleDarkMode}
-            color="default"
-          />
-        </Box>
+        <ThemeToggler isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
 
         <Fab
           color="primary"
@@ -215,11 +114,12 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
           open={open}
           onClose={handleClose}
           fullScreen
-          TransitionComponent={FluidTransition}
+          TransitionComponent={SlideUpTransition}
         >
           <Box
             sx={{
               p: 3,
+              height: 64,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
@@ -246,38 +146,33 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
               value={newDate}
               onChange={(e) => setNewDate(e.target.value)}
             />
-            {newExercises.map((e, index) => (
-              <TextField
-                key={index}
-                margin="dense"
-                label={`Exercise ${index + 1}`}
-                fullWidth
-                value={e.exercise}
-                onChange={(event) =>
-                  handleExerciseChange(index, event.target.value)
-                }
-                placeholder="E.g., Squat: 5x5"
-              />
-            ))}
-            <IconButton
-              edge="end"
-              color="primary"
-              onClick={handleAddExerciseField}
-            >
-              <AddIcon />
-            </IconButton>
+            <ExerciseFields
+              exercises={newExercises}
+              onExerciseChange={handleExerciseChange}
+              handleAddExerciseField={handleAddExerciseField}
+              newExercises={newExercises}
+              sx={{ mt: 2 }}
+            />
           </DialogContent>
         </Dialog>
-        {trainingDays.map((day) => (
-          <Box mt={3} key={day.date}>
+        {trainingDays.length ? (
+          trainingDays.map((day) => (
             <TrainingDayCard
               date={day.date}
               exercises={day.exercises}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              key={day.date}
+              sx={{ mt: 3 }}
             />
+          ))
+        ) : (
+          <Box mt={3}>
+            <Typography variant="h6" color="textSecondary" align="center">
+              No training days added yet. Click the + button to start!
+            </Typography>
           </Box>
-        ))}
+        )}
       </Box>
     </Container>
   );
