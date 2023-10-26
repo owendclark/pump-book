@@ -2,20 +2,20 @@ import { createTheme } from "@mui/material";
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
       main: "#007BFF",
-      light: 'linear-gradient(45deg, #007BFF, #00FFC2)', // Introducing a gradient for a touch of modernity
+      light: "#00BFBB",
     },
     secondary: {
       main: "#FFFFFF",
     },
     background: {
-      default: '#111111',
-      paper: '#1E1E1E',
+      default: "#111111",
+      paper: "#1E1E1E",
     },
     error: {
-      main: 'linear-gradient(45deg, #FF5733, #FFC133)', // Introducing a gradient for the error as well
+      main: "#FF9A33",
     },
   },
   typography: {
@@ -28,21 +28,21 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '8px', // Rounded corners for buttons
-        }
-      }
+          borderRadius: "8px", // Rounded corners for buttons
+        },
+      },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', // Smooth transition for cards
-          '&:hover': {
-            transform: 'scale(1.03)', // Slight scale on hover for a dynamic feel
+          transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out", // Smooth transition for cards
+          "&:hover": {
+            transform: "scale(1.03)", // Slight scale on hover for a dynamic feel
           },
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 });
 
 export default theme;
