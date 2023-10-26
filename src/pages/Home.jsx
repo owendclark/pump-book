@@ -13,7 +13,7 @@ import {
   Card,
   CardContent,
   Stack,
-  Switch, //Maybe Not
+  Switch,
   alpha,
   Divider,
 } from "@mui/material";
@@ -23,66 +23,52 @@ import {
   Save as SaveIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Brightness4 as Brightness4Icon, //Maybe Not
-  Brightness7 as Brightness7Icon, //Maybe Not
+  Brightness4 as Brightness4Icon,
+  Brightness7 as Brightness7Icon,
 } from "@mui/icons-material";
 
-const SlideUpTransition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+const FluidTransition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} easing="ease-in-out" />;
 });
 
 const TrainingDayCard = ({ date, exercises, onEdit, onDelete }) => {
   return (
     <Card
-      elevation={0} //Play around with removing this line
       sx={{
         mb: 2,
-        //p: 2,
-        //boxShadow: 2,
-        borderRadius: 2,
-        border: "1px solid",
-        borderColor: alpha("#007BFF", 0.3),
+        p: 2,
+        boxShadow: 2,
+        borderRadius: "16px",
         position: "relative",
-        overflow: "hidden",
       }}
     >
-      <CardContent>
-        <Typography
-          variant="h6"
-          fontFamily="serif"
-          color="primary"
-          gutterBottom
-        >
-          {date}
+      <Typography variant="h6" color="primary">
+        {date}
+      </Typography>
+      <Divider sx={{ my: 1.5, borderColor: alpha("#007BFF", 0.3) }} />
+      {exercises.map((exercise, index) => (
+        <Typography key={index} variant="body2" my={0.5}>
+          {exercise}
         </Typography>
-
-        <Stack spacing={1} mb={2}>
-          {exercises.map((exercise, index) => (
-            <Typography key={index} variant="body2">
-              {exercise}
-            </Typography>
-          ))}
-        </Stack>
-
-        <Stack direction="row" spacing={1} justifyContent="flex-end">
-          <IconButton
-            onClick={() => onEdit(date)}
-            size="large"
-            color="primary"
-            sx={{ zIndex: 1 }}
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            onClick={() => onDelete(date)}
-            size="large"
-            color="error"
-            sx={{ zIndex: 1 }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Stack>
-      </CardContent>
+      ))}
+      <Stack direction="row" justifyContent="flex-end" spacing={1} mt={2}>
+        <IconButton
+          onClick={() => onEdit(date)}
+          size="small"
+          color="primary"
+          sx={{ zIndex: 1 }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+        <IconButton
+          onClick={() => onDelete(date)}
+          size="small"
+          color="error"
+          sx={{ zIndex: 1 }}
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Stack>
 
       <Box
         sx={{
@@ -92,10 +78,14 @@ const TrainingDayCard = ({ date, exercises, onEdit, onDelete }) => {
           width: "100%",
           height: "100%",
           backgroundImage:
-            "linear-gradient(120deg, transparent 0%, transparent 70%, #007BFF 70%)",
-          transform: "skewX(-15deg)",
+            "linear-gradient(120deg, transparent 0%, transparent 65%, #007BFF 65%)",
+          transform: `skewX(${Math.random() * -20 - 10}deg)`,
           transformOrigin: "bottom left",
-          opacity: 0.06,
+          opacity: 0.08,
+          transition: "transform 0.2s ease-in-out",
+          "&:hover": {
+            transform: `skewX(${Math.random() * -25 - 5}deg) scale(1.02)`,
+          },
         }}
       />
     </Card>
@@ -173,8 +163,12 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
           gutterBottom
           sx={{
             fontWeight: "bold",
-            letterSpacing: "0.1em",
+            letterSpacing: "0.05em",
             textTransform: "uppercase",
+            marginBottom: 2,
+            background: "linear-gradient(120deg, #007BFF, #00BFBB)",
+            "-webkit-background-clip": "text",
+            "-webkit-text-fill-color": "transparent",
           }}
         >
           Pump Book
@@ -191,7 +185,11 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
             gap: 2,
           }}
         >
-          {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+          {isDarkMode ? (
+            <Brightness7Icon sx={{ color: alpha("#007BFF", 0.7) }} />
+          ) : (
+            <Brightness4Icon sx={{ color: alpha("#00BFBB", 0.7) }} />
+          )}
           <Switch
             checked={isDarkMode}
             onChange={toggleDarkMode}
@@ -217,7 +215,7 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
           open={open}
           onClose={handleClose}
           fullScreen
-          TransitionComponent={SlideUpTransition}
+          TransitionComponent={FluidTransition}
         >
           <Box
             sx={{

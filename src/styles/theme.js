@@ -23,6 +23,7 @@ const getDynamicTheme = (mode) => {
       primary: {
         main: "#007BFF",
         light: "#00BFBB",
+        dark: "#005388",
         contrastText: currentPalette.text,
       },
       secondary: {
@@ -42,7 +43,7 @@ const getDynamicTheme = (mode) => {
       fontFamily: "'Poppins', sans-serif",
       fontWeightRegular: 400,
       fontWeightMedium: 500,
-      fontWeightBold: 700, //Decide on either 700 or 600
+      fontWeightBold: 700,
       h1: {
         fontSize: "2rem",
         fontWeight: 700,
@@ -60,7 +61,7 @@ const getDynamicTheme = (mode) => {
       MuiButton: {
         styleOverrides: {
           root: {
-            borderRadius: "50px", //50px is pill shaped, change to 8px if we just want rounded buttons
+            borderRadius: "50px",
             textTransform: "none",
             padding: "12px 24px",
           },
@@ -76,11 +77,25 @@ const getDynamicTheme = (mode) => {
               mode === "dark" ? "rgba(0,0,0,0.16)" : "rgba(0, 0, 0, 0.08)"
             }`,
             "&:hover": {
-              transform: "scale(1.05)", // Change to 1.03 if we want to tune it down
+              transform: "scale(1.05)",
               boxShadow: `0 5px 12px ${
                 mode === "dark" ? "rgba(0,0,0,0.24)" : "rgba(0, 0, 0, 0.16)"
               }`,
             },
+          },
+        },
+      },
+      MuiTypography: {
+        styleOverrides: {
+          root: {
+            letterSpacing: "0.025em",
+            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
+          },
+          h6: {
+            fontSize: "1.1rem",
+            lineHeight: 1.5,
+            textTransform: "uppercase",
+            fontWeight: 500,
           },
         },
       },
@@ -90,50 +105,3 @@ const getDynamicTheme = (mode) => {
 
 export const darkTheme = getDynamicTheme("dark");
 export const lightTheme = getDynamicTheme("light");
-
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-    primary: {
-      main: "#007BFF",
-      light: "#00BFBB",
-    },
-    secondary: {
-      main: "#FFFFFF",
-    },
-    background: {
-      default: "#111111",
-      paper: "#1E1E1E",
-    },
-    error: {
-      main: "#FF9A33",
-    },
-  },
-  typography: {
-    fontFamily: "'Poppins', sans-serif", // Using a modern, geometric typeface
-    fontWeightRegular: 400,
-    fontWeightMedium: 500,
-    fontWeightBold: 600,
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: "8px", // Rounded corners for buttons
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out", // Smooth transition for cards
-          "&:hover": {
-            transform: "scale(1.03)", // Slight scale on hover for a dynamic feel
-          },
-        },
-      },
-    },
-  },
-});
-
-//export default theme;
