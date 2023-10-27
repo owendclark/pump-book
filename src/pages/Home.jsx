@@ -25,10 +25,24 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [open, setOpen] = useState(false);
   const [editingDay, setEditingDay] = useState(null);
   const [newDate, setNewDate] = useState("");
-  const [newExercises, setNewExercises] = useState([{ exercise: "" }]);
+  const [newExercises, setNewExercises] = useState([
+    { name: "", sets: "", reps: "" },
+  ]);
   const [trainingDays, setTrainingDays] = useState([
-    { date: "2023-10-24", exercises: ["Squat: 5x5", "Bench: 3x8"] },
-    { date: "2023-10-23", exercises: ["Deadlift: 3x4", "Pull-ups: 3x10"] },
+    {
+      date: "2023-10-24",
+      exercises: [
+        { name: "Squat", sets: "5", reps: "5" },
+        { name: "Bench Press", sets: "3", reps: "8" },
+      ],
+    },
+    {
+      date: "2023-10-23",
+      exercises: [
+        { name: "Deadlift", sets: "3", reps: "4" },
+        { name: "Pull-ups", sets: "3", reps: "10" },
+      ],
+    },
   ]);
 
   const sortByDateDesc = (a, b) => new Date(b.date) - new Date(a.date);
@@ -42,11 +56,16 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const handleAdd = () => {
     if (
       newDate &&
-      !newExercises.some((exercise) => !exercise.exercise.trim())
+      !newExercises.some(
+        (exercise) =>
+          !exercise.name.trim() ||
+          !exercise.sets.trim() ||
+          !exercise.reps.trim()
+      )
     ) {
       const newEntry = {
         date: newDate,
-        exercises: newExercises.map((e) => e.exercise),
+        exercises: newExercises,
       };
       const updatedTrainingDays = editingDay
         ? trainingDays.filter((day) => day.date !== editingDay)
@@ -57,7 +76,7 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
 
       setTrainingDays(updatedTrainingDays);
       setNewDate("");
-      setNewExercises([{ exercise: "" }]);
+      setNewExercises([{ name: "", sets: "", reps: "" }]);
       handleClose();
     }
   };
@@ -66,9 +85,9 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
     setNewExercises([...newExercises, { exercise: "" }]);
   };
 
-  const handleExerciseChange = (index, value) => {
+  const handleExerciseChange = (index, field, value) => {
     const changedExercises = [...newExercises];
-    changedExercises[index].exercise = value;
+    changedExercises[index][field] = value;
     setNewExercises(changedExercises);
   };
 
@@ -150,7 +169,6 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
               exercises={newExercises}
               onExerciseChange={handleExerciseChange}
               handleAddExerciseField={handleAddExerciseField}
-              newExercises={newExercises}
               sx={{ mt: 2 }}
             />
           </DialogContent>

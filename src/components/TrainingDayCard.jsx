@@ -29,7 +29,7 @@ const TrainingDayCard = ({ date, exercises, onEdit, onDelete }) => {
       <Divider sx={{ my: 1.5, borderColor: alpha("#007BFF", 0.3) }} />
       {exercises.map((exercise, index) => (
         <Typography key={index} variant="body2" my={0.5}>
-          {exercise}
+          {`${exercise.name} - ${exercise.sets} Sets of ${exercise.reps} Reps`}
         </Typography>
       ))}
       <Stack direction="row" justifyContent="flex-end" spacing={1} mt={2}>

@@ -1,42 +1,75 @@
-import { TextField, IconButton } from "@mui/material";
+import { TextField, IconButton, Box } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
 
 const ExerciseFields = ({
   exercises,
   onExerciseChange,
   handleAddExerciseField,
-  newExercises,
 }) => {
   const isLastExerciseFilled = () => {
-    const lastExercise = newExercises[newExercises.length - 1].exercise;
-    return lastExercise.trim().length > 0;
+    const lastExercise = exercises[exercises.length - 1];
+    return (
+      lastExercise.name &&
+      lastExercise.name.trim().length > 0 &&
+      lastExercise.sets &&
+      lastExercise.sets.trim().length > 0 &&
+      lastExercise.reps &&
+      lastExercise.reps.trim().length > 0
+    );
   };
 
   return (
-    <>
-      {exercises.map((e, index) => (
-        <TextField
-          key={index}
-          margin="dense"
-          label={`Exercise ${index + 1}`}
-          fullWidth
-          variant="outlined"
-          value={e.exercise}
-          onChange={(event) => onExerciseChange(index, event.target.value)}
-          placeholder="E.g., Squat: 5x5"
-          sx={{ mt: 1 }}
-        />
+    <Box>
+      {exercises.map((exercise, index) => (
+        <Box key={index} display="flex" alignItems="center" gap={2} mt={1}>
+          <TextField
+            key={index}
+            margin="dense"
+            label={"Exercise Name"}
+            value={exercise.name}
+            onChange={(event) =>
+              onExerciseChange(index, "name", event.target.value)
+            }
+            placeholder="E.g., Squat"
+            variant="outlined"
+            sx={{ flex: 2 }}
+          />
+          <TextField
+            key={index}
+            margin="dense"
+            label={"Sets"}
+            value={exercise.sets}
+            onChange={(event) =>
+              onExerciseChange(index, "sets", event.target.value)
+            }
+            variant="outlined"
+            sx={{ flex: 1 }}
+          />
+          <TextField
+            key={index}
+            margin="dense"
+            label={"Reps"}
+            value={exercise.reps}
+            onChange={(event) =>
+              onExerciseChange(index, "reps", event.target.value)
+            }
+            variant="outlined"
+            sx={{ flex: 1 }}
+          />
+        </Box>
       ))}
-      <IconButton
-        edge="end"
-        color="primary"
-        onClick={handleAddExerciseField}
-        aria-label="Add Exercise"
-        disabled={!isLastExerciseFilled()}
-      >
-        <AddIcon />
-      </IconButton>
-    </>
+      <Box mt={2}>
+        <IconButton
+          edge="end"
+          color="primary"
+          onClick={handleAddExerciseField}
+          aria-label="Add Exercise"
+          disabled={!isLastExerciseFilled()}
+        >
+          <AddIcon />
+        </IconButton>
+      </Box>
+    </Box>
   );
 };
 
