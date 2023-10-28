@@ -26,31 +26,61 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [editingDay, setEditingDay] = useState(null);
   const [newDate, setNewDate] = useState("");
   const [newExercises, setNewExercises] = useState([
-    { name: "", sets: "", reps: "" },
+    { name: "", sets: "", reps: "", weightType: "", weight: "" },
   ]);
   const [trainingDays, setTrainingDays] = useState([
     {
       date: "2023-10-24",
       exercises: [
-        { name: "Squat", sets: "5", reps: "5" },
-        { name: "Bench Press", sets: "3", reps: "8" },
+        {
+          name: "Squat",
+          sets: "5",
+          reps: "5",
+          weightType: "Barbell",
+          weight: "225",
+        },
+        {
+          name: "Bench Press",
+          sets: "3",
+          reps: "8",
+          weightType: "Barbell",
+          weight: "185",
+        },
       ],
     },
     {
       date: "2023-10-23",
       exercises: [
-        { name: "Deadlift", sets: "3", reps: "4" },
-        { name: "Pull-ups", sets: "3", reps: "10" },
+        {
+          name: "Deadlift",
+          sets: "3",
+          reps: "4",
+          weightType: "Barbell",
+          weight: "315",
+        },
+        {
+          name: "Pull-ups",
+          sets: "3",
+          reps: "10",
+          weightType: "Bodyweight",
+          weight: "",
+        },
       ],
     },
   ]);
 
   const sortByDateDesc = (a, b) => new Date(b.date) - new Date(a.date);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
-    setNewExercises([{ exercise: "" }]);
+    setEditingDay(null);
+    setNewExercises([
+      { name: "", sets: "", reps: "", weightType: "", weight: "" },
+    ]);
   };
 
   const handleAdd = () => {
@@ -102,7 +132,7 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
     const dayToEdit = trainingDays.find((day) => day.date === dateToEdit);
     setEditingDay(dayToEdit.date);
     setNewDate(dayToEdit.date);
-    setNewExercises(dayToEdit.exercises.map((exercise) => ({ exercise })));
+    setNewExercises(dayToEdit.exercises);
     handleOpen();
   };
 
