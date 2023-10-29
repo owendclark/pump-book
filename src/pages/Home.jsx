@@ -4,6 +4,7 @@ import SlideUpTransition from "../styles/SlideUpTransition";
 import TrainingDayCard from "../components/TrainingDayCard";
 import ThemeToggler from "../components/ThemeToggler";
 import ExerciseFields from "../components/ExerciseFields";
+import testData from "../testData";
 
 import {
   Container,
@@ -26,48 +27,9 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [editingDay, setEditingDay] = useState(null);
   const [newDate, setNewDate] = useState("");
   const [newExercises, setNewExercises] = useState([
-    { name: "", sets: "", reps: "", weightType: "", weight: "" },
+    { name: "", weightType: "", sets: [{ reps: "", weight: "" }] },
   ]);
-  const [trainingDays, setTrainingDays] = useState([
-    {
-      date: "2023-10-24",
-      exercises: [
-        {
-          name: "Squat",
-          sets: "5",
-          reps: "5",
-          weightType: "Barbell",
-          weight: "225",
-        },
-        {
-          name: "Bench Press",
-          sets: "3",
-          reps: "8",
-          weightType: "Barbell",
-          weight: "185",
-        },
-      ],
-    },
-    {
-      date: "2023-10-23",
-      exercises: [
-        {
-          name: "Deadlift",
-          sets: "3",
-          reps: "4",
-          weightType: "Barbell",
-          weight: "315",
-        },
-        {
-          name: "Pull-ups",
-          sets: "3",
-          reps: "10",
-          weightType: "Bodyweight",
-          weight: "",
-        },
-      ],
-    },
-  ]);
+  const [trainingDays, setTrainingDays] = useState(testData);
 
   const sortByDateDesc = (a, b) => new Date(b.date) - new Date(a.date);
 
@@ -79,45 +41,61 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
     setOpen(false);
     setEditingDay(null);
     setNewExercises([
-      { name: "", sets: "", reps: "", weightType: "", weight: "" },
+      { name: "", weightType: "", sets: [{ reps: "", weight: "" }] },
     ]);
   };
 
   const handleAdd = () => {
+    console.log("Inside of handleAdd");
     if (
       newDate &&
       !newExercises.some(
         (exercise) =>
           !exercise.name.trim() ||
-          !exercise.sets.trim() ||
-          !exercise.reps.trim()
+          !exercise.weightType.trim() ||
+          exercise.sets.some((set) => !set.reps.trim() || !set.weight.trim())
       )
     ) {
+      console.log("Inside of handleAdd conditional");
       const newEntry = {
         date: newDate,
         exercises: newExercises,
       };
+      console.log("newEntry: ", newEntry);
       const updatedTrainingDays = editingDay
         ? trainingDays.filter((day) => day.date !== editingDay)
         : [...trainingDays];
 
       updatedTrainingDays.push(newEntry);
       updatedTrainingDays.sort(sortByDateDesc);
+      console.log("updatedTrainingDays: ", updatedTrainingDays);
 
       setTrainingDays(updatedTrainingDays);
       setNewDate("");
-      setNewExercises([{ name: "", sets: "", reps: "" }]);
+      setNewExercises([
+        { name: "", weightType: "", sets: [{ reps: "", weight: "" }] },
+      ]);
       handleClose();
     }
   };
 
   const handleAddExerciseField = () => {
-    setNewExercises([...newExercises, { exercise: "" }]);
+    setNewExercises([
+      ...newExercises,
+      { name: "", weightType: "", sets: [{ reps: "", weight: "" }] },
+    ]);
   };
 
-  const handleExerciseChange = (index, field, value) => {
+  const handleExerciseChange = (exerciseIndex, setIndex, field, value) => {
+    setIndex = setIndex || 0;
     const changedExercises = [...newExercises];
-    changedExercises[index][field] = value;
+
+    if (field === "reps" || field === "weight") {
+      changedExercises[exerciseIndex].sets[setIndex][field] = value;
+    } else {
+      changedExercises[exerciseIndex][field] = value;
+    }
+
     setNewExercises(changedExercises);
   };
 
