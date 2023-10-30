@@ -28,7 +28,7 @@ const TrainingDayCard = ({ date, exercises, onEdit, onDelete }) => {
       </Typography>
       <Divider sx={{ my: 1.5, borderColor: alpha("#007BFF", 0.3) }} />
       {exercises.map((exercise, index) => (
-        <Box>
+        <Box key={index}>
           <Typography key={index} variant="body2" my={0.5}>
             {exercise.weightType} {exercise.name}
           </Typography>
