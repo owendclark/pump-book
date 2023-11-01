@@ -1,15 +1,3 @@
-const weightTypes = [
-  "Bodyweight",
-  "Assisted",
-  "Weighted",
-  "Dumbbell",
-  "Barbell",
-  "Machine",
-  "Cable",
-  "EZ Bar",
-  "Trap Bar",
-];
-
 const testData = [
   {
     date: "2023-10-24",

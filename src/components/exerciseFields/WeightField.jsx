@@ -1,3 +1,4 @@
+import React from "react";
 import { Grid, TextField } from "@mui/material";
 
 const WeightField = ({
@@ -10,7 +11,7 @@ const WeightField = ({
   return (
     <Grid item xs={12}>
       <TextField
-        fullWidth
+      fullWidth
         label="Weight"
         placeholder={exercise.weightType === "Dumbbell" ? "20lbs" : "135lb"}
         value={set.weight || ""}

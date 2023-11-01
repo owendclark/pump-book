@@ -1,3 +1,4 @@
+import React from "react";
 import { Grid, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 const WeightTypeField = ({ exercise, exerciseIndex, onExerciseChange }) => {
@@ -15,8 +16,8 @@ const WeightTypeField = ({ exercise, exerciseIndex, onExerciseChange }) => {
 
   return (
     <Grid item xs={12}>
-      <FormControl variant="outlined" fullWidth sx={{ mt: 2 }}>
-        <InputLabel>Type</InputLabel>
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel> Exercise Type</InputLabel>
         <Select
           label="Type"
           value={exercise.weightType || ""}

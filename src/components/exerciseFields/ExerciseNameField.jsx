@@ -1,8 +1,9 @@
+import React from "react";
 import { Grid, TextField } from "@mui/material";
 
 const ExerciseNameField = ({ exercise, exerciseIndex, onExerciseChange }) => {
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} pt={2}>
       <TextField
         fullWidth
         label="Exercise Name"

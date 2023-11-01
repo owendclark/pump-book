@@ -1,8 +1,15 @@
+import React from "react";
 import { Grid, TextField } from "@mui/material";
 
-const RepField = ({ exerciseIndex, set, setIndex, onExerciseChange }) => {
+const RepField = ({
+  exercise,
+  exerciseIndex,
+  set,
+  setIndex,
+  onExerciseChange,
+}) => {
   return (
-    <Grid item xs={6}>
+    <Grid item xs={12}>
       <TextField
         fullWidth
         label="Reps"

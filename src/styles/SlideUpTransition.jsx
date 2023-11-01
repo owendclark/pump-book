@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
 import { Slide } from "@mui/material";
 
 const SlideUpTransition = forwardRef((props, ref) => (

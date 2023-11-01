@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Switch, alpha } from "@mui/material";
 import {
   Brightness4 as Brightness4Icon,
