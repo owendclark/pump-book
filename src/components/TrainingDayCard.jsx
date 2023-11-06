@@ -1,66 +1,77 @@
 import React from "react";
-import cardBackground from "../styles/cardBackground";
-
 import {
   Card,
   Typography,
   IconButton,
   Stack,
-  alpha,
-  Box,
   Divider,
+  useTheme,
+  Box,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const TrainingDayCard = ({ date, exercises, onEdit, onDelete }) => {
+  const theme = useTheme();
+
   return (
     <Card
       sx={{
-        mb: 2,
-        p: 2,
-        boxShadow: 2,
-        borderRadius: "16px",
-        position: "relative",
+        margin: theme.spacing(2),
+        p: theme.spacing(2),
+        boxShadow: theme.shadows[1],
+        "&:hover": { boxShadow: theme.shadows[8] },
       }}
     >
-      <Typography variant="h6" color="primary">
-        {date}
-      </Typography>
-      <Divider sx={{ my: 1.5, borderColor: alpha("#007BFF", 0.3) }} />
-      {exercises.map((exercise, index) => (
-        <Box key={index}>
-          <Typography key={index} variant="body2" my={0.5}>
-            {exercise.weightType} {exercise.name}
-          </Typography>
-          {exercise.sets.map((set, index) => (
-            <Typography key={index} variant="body2" my={0.5}>
-              {set.reps} Reps with {set.weight}{" "}
-              {exercise.weightType === "Weighted" ? "added" : ""}
-            </Typography>
-          ))}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: theme.spacing(2) }}
+      >
+        <Typography variant="h6" color="primary" gutterBottom>
+          {date}
+        </Typography>
+        <Box>
+          <IconButton onClick={() => onEdit(date)} size="small" color="primary">
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={() => onDelete(date)}
+            size="small"
+            sx={{ ml: 1 }}
+            color="error"
+          >
+            <DeleteIcon />
+          </IconButton>
         </Box>
-      ))}
-      <Stack direction="row" justifyContent="flex-end" spacing={1} mt={2}>
-        <IconButton
-          onClick={() => onEdit(date)}
-          size="small"
-          color="primary"
-          sx={{ zIndex: 1 }}
-        >
-          <EditIcon fontSize="small" />
-        </IconButton>
-        <IconButton
-          onClick={() => onDelete(date)}
-          size="small"
-          color="error"
-          sx={{ zIndex: 1 }}
-        >
-          <DeleteIcon fontSize="small" />
-        </IconButton>
       </Stack>
-
-      <Box sx={cardBackground} />
+      <Divider sx={{ mb: theme.spacing(2) }} />
+      <Stack spacing={2}>
+        {exercises.map((exercise, index) => (
+          <Stack key={`exercise-${index}`} spacing={1}>
+            <Typography variant="subtitle1" color="text.primary" gutterBottom>
+              {exercise.name} - {exercise.weightType}
+            </Typography>
+            {exercise.sets.map((set, setIndex) => (
+              <Typography
+                key={`set-${setIndex}`}
+                variant="body2"
+                color="text.secondary"
+                gutterBottom
+              >
+                {`${set.reps} reps ${
+                  set.weight
+                    ? `@ ${set.weight}${
+                        exercise.weightType === "Weighted" ? "kg" : ""
+                      }`
+                    : ""
+                } RPE: ${set.RPE}`}
+              </Typography>
+            ))}
+          </Stack>
+        ))}
+      </Stack>
     </Card>
   );
 };

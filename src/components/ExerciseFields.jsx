@@ -17,10 +17,11 @@ const ExerciseFields = ({
       return false;
     }
 
-    // If the exercise type requires weight, check if all sets have weights specified and check if all sets have reps and weights specified
+    // If the exercise type requires weight, check if all sets have weights specified and check if all sets have reps and weights and RPE specified
     for (let set of lastExercise.sets) {
       if (
         !set.reps ||
+        !set.RPE ||
         (lastExercise.weightType !== "Bodyweight" && !set.weight)
       ) {
         return false;

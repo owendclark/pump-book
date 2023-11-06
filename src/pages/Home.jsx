@@ -27,7 +27,7 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [editingDay, setEditingDay] = useState(null);
   const [newDate, setNewDate] = useState("");
   const [newExercises, setNewExercises] = useState([
-    { name: "", weightType: "", sets: [{ reps: "", weight: "" }] },
+    { name: "", weightType: "", sets: [{ reps: "", weight: "", RPE: "" }] },
   ]);
   const [trainingDays, setTrainingDays] = useState(testData);
 
@@ -41,7 +41,7 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
     setOpen(false);
     setEditingDay(null);
     setNewExercises([
-      { name: "", weightType: "", sets: [{ reps: "", weight: "" }] },
+      { name: "", weightType: "", sets: [{ reps: "", weight: "", RPE: "" }] },
     ]);
   };
 
@@ -53,7 +53,9 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
         (exercise) =>
           !exercise.name.trim() ||
           !exercise.weightType.trim() ||
-          exercise.sets.some((set) => !set.reps.trim() || !set.weight.trim())
+          exercise.sets.some(
+            (set) => !set.reps.trim() || !set.weight.trim() || !set.RPE.trim()
+          )
       )
     ) {
       console.log("Inside of handleAdd conditional");
@@ -82,7 +84,7 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const handleAddExerciseField = () => {
     setNewExercises([
       ...newExercises,
-      { name: "", weightType: "", sets: [{ reps: "", weight: "" }] },
+      { name: "", weightType: "", sets: [{ reps: "", weight: "", RPE: "" }] },
     ]);
   };
 
@@ -90,7 +92,7 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
     setIndex = setIndex || 0;
     const changedExercises = [...newExercises];
 
-    if (field === "reps" || field === "weight") {
+    if (field === "reps" || field === "weight" || field === "RPE") {
       changedExercises[exerciseIndex].sets[setIndex][field] = value;
     } else {
       changedExercises[exerciseIndex][field] = value;

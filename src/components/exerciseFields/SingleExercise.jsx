@@ -24,11 +24,13 @@ const SingleExercise = ({ exercise, exerciseIndex, onExerciseChange }) => {
             onExerciseChange={onExerciseChange}
           />
         ))}
-        <AddSetButton
-          exercise={exercise}
-          exerciseIndex={exerciseIndex}
-          onExerciseChange={onExerciseChange}
-        />
+        <Box pt={1.5}>
+          <AddSetButton
+            exercise={exercise}
+            exerciseIndex={exerciseIndex}
+            onExerciseChange={onExerciseChange}
+          />
+        </Box>
       </Box>
     </Box>
   );

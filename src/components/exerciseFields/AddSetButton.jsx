@@ -5,6 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 const AddSetButton = ({ exercise, exerciseIndex, onExerciseChange }) => {
   return (
     <Button
+      variant="outlined"
       startIcon={<AddIcon />}
       onClick={() => {
         const updatedExercise = { ...exercise };

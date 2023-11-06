@@ -1,4 +1,6 @@
-const cardBackground = {
+import { styled } from "@mui/material/styles";
+
+const CardBackground = styled("div")(({ theme }) => ({
   position: "absolute",
   top: 0,
   left: 0,
@@ -13,6 +15,6 @@ const cardBackground = {
   "&:hover": {
     transform: "skewX(-25deg) scale(1.02)",
   },
-};
+}));
 
-export default cardBackground;
+export default CardBackground;

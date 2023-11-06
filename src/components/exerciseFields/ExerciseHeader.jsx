@@ -6,7 +6,7 @@ import { Grid } from "@mui/material";
 
 const ExerciseHeader = ({ exercise, exerciseIndex, onExerciseChange }) => {
   return (
-    <Grid container>
+    <Grid container pb={0.5}>
       <WeightTypeField
         exercise={exercise}
         exerciseIndex={exerciseIndex}
